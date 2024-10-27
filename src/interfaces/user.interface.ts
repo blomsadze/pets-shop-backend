@@ -10,8 +10,4 @@ export interface IUser {
       quantity: number;
     }[];
   };
-  // addToCart: (productId: string) => Promise<void>;
-  // removeFromCart: (productId: string) => Promise<void>;
-  // clearCart: () => Promise<void>;
-  // populate(path: string): Promise<IUser>;
 }

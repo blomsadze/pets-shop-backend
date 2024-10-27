@@ -33,9 +33,20 @@ export const uploadImage = async (req: any) => {
     const { base64 } = bufferToDataURI(fileFormat, file?.buffer);
 
     const imageDetails = await uploadToCloudinary(base64, fileFormat);
-    const imageUrl = imageDetails?.secure_url || null;
 
-    return imageUrl;
+    return {
+      url: imageDetails?.secure_url,
+      publicId: imageDetails?.public_id
+    };
+  } catch (error) {
+    console.log('cloudinaryError', error);
+  }
+};
+
+export const deleteImage = async (public_id: string) => {
+  try {
+    const { uploader } = cloudinary.v2;
+    await uploader.destroy(public_id);
   } catch (error) {
     console.log(error);
   }
