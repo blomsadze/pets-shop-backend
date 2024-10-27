@@ -8,6 +8,7 @@ import { successHandler } from '../utils/successHadler.util.js';
 import { IUser } from '../interfaces/user.interface.js';
 import { loginSchema, signUpSchema } from '../validations/auth.validation.js';
 import { validationHandler } from '../utils/validationHandler.util.js';
+import { generateToken } from '../utils/auth.util.js';
 
 export const signUp = asyncHandler(async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -50,15 +51,17 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     return errorHandler(res, 'username or password is incorrect', 400);
   }
 
-  req.session.isLoggedIn = true;
+  const token = generateToken(user._id);
+
   req.session.user = user;
+  req.session.token = token;
 
   req.session.save();
 
   return successHandler(
     res,
     {
-      user: { name: user.name, email: user.email }
+      token
     },
     '',
     200
