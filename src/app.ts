@@ -99,7 +99,7 @@ app.use(compression());
 
 app.use(get404);
 
-// @ts-ignore
+// @ts-expect-error err
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   return globalErrorHandler(error, req, res);
 });

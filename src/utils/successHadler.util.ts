@@ -2,7 +2,7 @@ import { Response } from 'express';
 
 export const successHandler = (
   res: Response,
-  data: any,
+  data: object | null,
   message = 'Request successful',
   statusCode = 200
   // meta = {}
