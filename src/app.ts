@@ -13,8 +13,9 @@ import User from './models/user.model';
 
 // Routes
 import { authRoutes } from './routes/auth.route';
-import { toyRoutes } from './routes/toy.route';
 import { adminRoutes } from './routes/admin.route';
+import { toyRoutes } from './routes/toy.route';
+import { accessoryRoutes } from './routes/accessory.route';
 
 import { globalErrorHandler } from './utils/errorHandler.util.js';
 import { get404 } from './controllers/error.controller';
@@ -91,6 +92,7 @@ app.use((req, res, next) => {
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
 app.use(toyRoutes);
+app.use(accessoryRoutes);
 
 app.use(helmet());
 app.use(compression());

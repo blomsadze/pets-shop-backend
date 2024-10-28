@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { IToy } from '../interfaces/toy.interface';
+import { IAccessory } from '../interfaces/accessory.interface';
 
 const { Schema } = mongoose;
 
-const toySchema = new Schema<IToy>({
+const accessorySchema = new Schema<IAccessory>({
   name: {
     type: String,
     required: true
@@ -27,4 +27,4 @@ const toySchema = new Schema<IToy>({
   }
 });
 
-export default mongoose.model('Toy', toySchema);
+export default mongoose.model('Accessory', accessorySchema);
