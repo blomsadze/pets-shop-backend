@@ -1,5 +1,5 @@
 import { IUser } from '../interfaces/user.interface';
-import mongoose from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -44,9 +44,11 @@ userSchema.set('toJSON', {
 
 userSchema.methods.addToCart = async function (productId: string) {
   try {
-    const cartProductIndex = this?.cart?.items?.findIndex((cp: any) => {
-      return cp.productId.toString() === productId.toString();
-    });
+    const cartProductIndex = this?.cart?.items?.findIndex(
+      (cp: { productId: ObjectId }) => {
+        return cp.productId.toString() === productId.toString();
+      }
+    );
     let newQuantity = 1;
     const updatedCartItems = [...this.cart.items];
     if (cartProductIndex >= 0) {
@@ -72,7 +74,8 @@ userSchema.methods.addToCart = async function (productId: string) {
 userSchema.methods.removeFromCart = async function (productId: string) {
   try {
     const updatedCartItems = this.cart.items.filter(
-      (item: any) => item.productId.toString() !== productId.toString()
+      (item: { productId: ObjectId }) =>
+        item.productId.toString() !== productId.toString()
     );
     this.cart.items = updatedCartItems;
     await this.save();
