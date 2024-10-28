@@ -7,4 +7,4 @@ import {
 export const accessoryRoutes = express.Router();
 
 accessoryRoutes.get('/accessories', getAccessories);
-accessoryRoutes.get('/accessory/:id', getAccessory);
+accessoryRoutes.get('/accessories/:id', getAccessory);

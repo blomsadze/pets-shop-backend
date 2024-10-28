@@ -60,13 +60,12 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const accessToken = jwt.sign({ userId: user._id }, accessTokenSecretKey, {
-    expiresIn: '1m'
+    expiresIn: '6h'
   });
 
   const refreshToken = jwt.sign({ userId: user._id }, refreshTokenSecretKey);
 
   refreshTokens.push(refreshToken);
-  console.log('refreshTokens after push:', refreshTokens);
 
   req.session.user = user;
   req.session.token = accessToken;
@@ -103,7 +102,7 @@ export const refreshToken = asyncHandler(
       const accessToken = jwt.sign(
         { uuserId: user._id },
         accessTokenSecretKey,
-        { expiresIn: '15m' }
+        { expiresIn: '1h' }
       );
       res.json({ accessToken });
     });

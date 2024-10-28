@@ -26,8 +26,12 @@ const userSchema = new Schema<IUser>({
       {
         productId: {
           type: Schema.Types.ObjectId,
-          ref: 'Product',
           required: true
+        },
+        model: {
+          type: String,
+          required: true,
+          enum: ['toy', 'accessory']
         },
         quantity: { type: Number, required: true }
       }
@@ -42,7 +46,10 @@ userSchema.set('toJSON', {
   }
 });
 
-userSchema.methods.addToCart = async function (productId: string) {
+userSchema.methods.addToCart = async function (
+  productId: string,
+  model: string
+) {
   try {
     const cartProductIndex = this?.cart?.items?.findIndex(
       (cp: { productId: ObjectId }) => {
@@ -57,7 +64,8 @@ userSchema.methods.addToCart = async function (productId: string) {
     } else {
       updatedCartItems.push({
         productId,
-        quantity: newQuantity
+        quantity: newQuantity,
+        model
       });
     }
     const updatedCart = {
