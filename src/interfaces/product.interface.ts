@@ -12,4 +12,5 @@ export interface IProduct {
   };
   user_id: ObjectId;
   category_id: ObjectId;
+  sales_count: number;
 }

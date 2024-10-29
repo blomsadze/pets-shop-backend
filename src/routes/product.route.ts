@@ -1,7 +1,14 @@
 import express from 'express';
-import { getProducts, getProduct } from '../controllers/product.controller';
+import {
+  getProducts,
+  getProduct,
+  newArrivals,
+  getTopSellingProducts
+} from '../controllers/product.controller';
 
 export const productRoutes = express.Router();
 
 productRoutes.get('/products', getProducts);
 productRoutes.get('/products/:id', getProduct);
+productRoutes.get('/products/new-arrivals', newArrivals);
+productRoutes.get('/products/top-selling', getTopSellingProducts);
