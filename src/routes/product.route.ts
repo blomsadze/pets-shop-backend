@@ -9,6 +9,6 @@ import {
 export const productRoutes = express.Router();
 
 productRoutes.get('/products', getProducts);
-productRoutes.get('/products/:id', getProduct);
 productRoutes.get('/products/new-arrivals', newArrivals);
 productRoutes.get('/products/top-selling', getTopSellingProducts);
+productRoutes.get('/products/:id', getProduct);
