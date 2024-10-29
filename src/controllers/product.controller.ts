@@ -1,27 +1,27 @@
 import { NextFunction, Request, Response } from 'express';
 
-import Accessory from '../models/accessory.model';
+import Product from '../models/product.model';
 
 // utils
 import { asyncHandler } from '../utils/asyncHandler.util';
 import { successHandler } from '../utils/successHadler.util';
 import { errorHandler } from '../utils/errorHandler.util';
 
-export const getAccessories = asyncHandler(
+export const getProducts = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const accessories = await Accessory.find();
-    return successHandler(res, accessories);
+    const products = await Product.find();
+    return successHandler(res, products);
   }
 );
 
-export const getAccessory = asyncHandler(
+export const getProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const accessory = await Accessory.findById(id);
+    const product = await Product.findById(id);
 
-    if (!accessory)
-      return errorHandler(res, 'Accessory with given id not found', 404);
+    if (!product)
+      return errorHandler(res, 'Product with given id not found', 404);
 
-    return successHandler(res, accessory);
+    return successHandler(res, product);
   }
 );

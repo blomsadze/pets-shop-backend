@@ -14,8 +14,7 @@ import User from './models/user.model';
 // Routes
 import { authRoutes } from './routes/auth.route';
 import { adminRoutes } from './routes/admin.route';
-import { toyRoutes } from './routes/toy.route';
-import { accessoryRoutes } from './routes/accessory.route';
+import { productRoutes } from './routes/product.route';
 import { cartRoutes } from './routes/cart.route';
 import { categoryRoutes } from './routes/categories.route';
 
@@ -93,10 +92,9 @@ app.use((req, res, next) => {
 
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
-app.use(toyRoutes);
-app.use(accessoryRoutes);
-app.use(cartRoutes);
 app.use(categoryRoutes);
+app.use(productRoutes);
+app.use(cartRoutes);
 
 app.use(helmet());
 app.use(compression());

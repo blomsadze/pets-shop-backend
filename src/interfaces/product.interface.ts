@@ -1,13 +1,15 @@
 import { ObjectId } from 'mongoose';
 
-export interface IAccessory {
+export interface IProduct {
   _id: string;
-  name: string;
+  name_ka: string;
+  name_en: string;
   description: string;
   price: number;
   image: {
     url: string;
     publicId: string;
   };
-  userId: ObjectId;
+  user_id: ObjectId;
+  category_id: ObjectId;
 }

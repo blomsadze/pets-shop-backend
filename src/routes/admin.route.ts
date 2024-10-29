@@ -1,14 +1,12 @@
 import express from 'express';
+
 import {
-  addAccessory,
   addCategory,
-  addToy,
-  deleteAccessory,
-  deleteCategory,
-  deleteToy,
-  editAccessory,
+  addProduct,
   editCategory,
-  editToy
+  editProduct,
+  deleteCategory,
+  deleteProduct
 } from '../controllers/admin.controller';
 import { isAuth } from '../middlewares/isAuth';
 import { isAdmin } from '../middlewares/isAdmin';
@@ -21,9 +19,6 @@ adminRoutes.put('/categories/:id', isAuth, isAdmin, editCategory);
 adminRoutes.delete('/categories/:id', isAuth, isAdmin, deleteCategory);
 
 // products
-adminRoutes.post('/toys', isAuth, isAdmin, addToy);
-adminRoutes.put('/toys/:id', isAuth, isAdmin, editToy);
-adminRoutes.delete('/toys/:id', isAuth, isAdmin, deleteToy);
-adminRoutes.post('/accessories', isAuth, isAdmin, addAccessory);
-adminRoutes.put('/accessories/:id', isAuth, isAdmin, editAccessory);
-adminRoutes.delete('/accessories/:id', isAuth, isAdmin, deleteAccessory);
+adminRoutes.post('/products', isAuth, isAdmin, addProduct);
+adminRoutes.put('/products/:id', isAuth, isAdmin, editProduct);
+adminRoutes.delete('/products/:id', isAuth, isAdmin, deleteProduct);

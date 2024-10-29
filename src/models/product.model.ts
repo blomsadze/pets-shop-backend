@@ -1,10 +1,14 @@
 import mongoose from 'mongoose';
-import { IAccessory } from '../interfaces/accessory.interface';
+import { IProduct } from '../interfaces/product.interface';
 
 const { Schema } = mongoose;
 
-const accessorySchema = new Schema<IAccessory>({
-  name: {
+const productSchema = new Schema<IProduct>({
+  name_ka: {
+    type: String,
+    required: true
+  },
+  name_en: {
     type: String,
     required: true
   },
@@ -20,11 +24,15 @@ const accessorySchema = new Schema<IAccessory>({
     required: true,
     type: Schema.Types.Mixed
   },
-  userId: {
+  user_id: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'User'
+  },
+  category_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
     required: true
   }
 });
 
-export default mongoose.model('Accessory', accessorySchema);
+export default mongoose.model('Product', productSchema);
