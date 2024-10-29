@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import Toy from '../models/toy.model';
+import Category from '../models/category.model';
 import Accessory from '../models/accessory.model';
 
 // utils
@@ -11,6 +12,63 @@ import { successHandler } from '../utils/successHadler.util';
 import { errorHandler } from '../utils/errorHandler.util';
 import { toyValidationSchema } from '../validations/toy.validation';
 import { accessoryValidationSchema } from '../validations/accessory.validation';
+import { categoryValidationSchema } from '../validations/category.validation';
+
+export const addCategory = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { name_ka, name_en } = req.body;
+
+    const { error } = categoryValidationSchema.validate(req.body);
+    if (error) return validationHandler(res, error);
+
+    const category = new Category({
+      name_ka,
+      name_en
+    });
+
+    await category.save();
+    return successHandler(res, category, 'category added successfully', 201);
+  }
+);
+export const editCategory = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const { name_ka, name_en } = req.body;
+
+    const category = await Category.findById(id);
+    if (!category)
+      return errorHandler(res, 'Category with given id not found', 404);
+
+    const { error } = categoryValidationSchema.validate(req.body, {
+      abortEarly: false
+    });
+
+    if (error) return validationHandler(res, error);
+
+    category.name_ka = name_ka;
+    category.name_en = name_en;
+
+    await category.save();
+    return successHandler(res, category, 'Category updated successfully');
+  }
+);
+export const deleteCategory = asyncHandler(
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    const category = await Category.findById(id);
+
+    if (!category)
+      return errorHandler(res, 'Category with given id not found', 404);
+
+    await Category.findByIdAndDelete(id);
+
+    if (!category)
+      return errorHandler(res, 'Category with given id not found', 404);
+
+    return successHandler(res, null, 'Category deleted successfully');
+  })
+);
 
 // toys
 export const addToy = asyncHandler(

@@ -17,6 +17,7 @@ import { adminRoutes } from './routes/admin.route';
 import { toyRoutes } from './routes/toy.route';
 import { accessoryRoutes } from './routes/accessory.route';
 import { cartRoutes } from './routes/cart.route';
+import { categoryRoutes } from './routes/categories.route';
 
 import { globalErrorHandler } from './utils/errorHandler.util.js';
 import { get404 } from './controllers/error.controller';
@@ -95,6 +96,7 @@ app.use('/admin', adminRoutes);
 app.use(toyRoutes);
 app.use(accessoryRoutes);
 app.use(cartRoutes);
+app.use(categoryRoutes);
 
 app.use(helmet());
 app.use(compression());
