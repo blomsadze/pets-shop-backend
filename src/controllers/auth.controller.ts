@@ -67,11 +67,6 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
   refreshTokens.push(refreshToken);
 
-  req.session.user = user;
-  req.session.token = accessToken;
-
-  req.session.save();
-
   return successHandler(
     res,
     {
@@ -84,8 +79,6 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const logout = asyncHandler(async (req: Request, res: Response) => {
-  req.session.destroy(() => {});
-
   return successHandler(res, null, '', 200);
 });
 

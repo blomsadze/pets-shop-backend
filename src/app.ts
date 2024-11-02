@@ -5,11 +5,6 @@ import mongoose from 'mongoose';
 import helmet from 'helmet';
 import compression from 'compression';
 import dotenv from 'dotenv';
-import session from 'express-session';
-import connectMongoDBSession from 'connect-mongodb-session';
-
-// Models
-import User from './models/user.model';
 
 // Routes
 import { authRoutes } from './routes/auth.route';
@@ -21,18 +16,13 @@ import { categoryRoutes } from './routes/categories.route';
 import { globalErrorHandler } from './utils/errorHandler.util.js';
 import { get404 } from './controllers/error.controller';
 
-// MongoDB session store
-const MongoDBStore = connectMongoDBSession(session);
 dotenv.config();
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@pets.nzmgh.mongodb.net/shop`;
 
 const app = express();
 
-const store = new MongoDBStore({
-  uri: MONGODB_URI,
-  collection: 'sessions'
-});
+app.use(express.json());
 
 // middlewares
 app.use(
@@ -56,30 +46,6 @@ app.use(
     storage: storage
   }).single('image')
 );
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET as string,
-    resave: false,
-    saveUninitialized: false,
-    store
-  })
-);
-
-app.use(async (req, res, next) => {
-  try {
-    if (!req.session.user) return next();
-
-    const user = await User.findById(req.session.user._id);
-
-    if (user) {
-      req.user = user;
-    }
-    next();
-  } catch (error) {
-    console.log(error);
-  }
-});
 
 // Set a timeout of 30 seconds
 app.use((req, res, next) => {

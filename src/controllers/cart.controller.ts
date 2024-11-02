@@ -35,6 +35,22 @@ export const postCart = asyncHandler(async (req: Request, res: Response) => {
   return successHandler(res, response, '', 200);
 });
 
+export const postMultipleCart = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { products } = req.body;
+
+    if (!products) return errorHandler(res, 'Products are required!', 400);
+
+    for (const product of products) {
+      console.log('product', product);
+      // const productFromDb = await Product.findById(product.id).select(
+      //   'name price description image category_id'
+      // );
+    }
+    return successHandler(res, {}, '', 200);
+  }
+);
+
 export const deleteCart = asyncHandler(async (req: Request, res: Response) => {
   const { productId } = req?.body;
 
