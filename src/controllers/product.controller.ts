@@ -28,13 +28,14 @@ export const getProducts = asyncHandler(
     }
 
     const products = await Product.find(filter)
+      .populate('category_id')
       .skip((pageNum - 1) * limitNum)
       .limit(limitNum);
 
     const totalProducts = await Product.countDocuments(filter);
 
     return successHandler(res, products, 'Products fetched successfully', 200, {
-      totalProducts,
+      totalItems: totalProducts,
       page: pageNum,
       limit: limitNum,
       totalPages: Math.ceil(totalProducts / limitNum)
@@ -45,7 +46,7 @@ export const getProducts = asyncHandler(
 export const getProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate('category_id');
 
     if (!product)
       return errorHandler(res, 'Product with given id not found', 404);
@@ -60,10 +61,17 @@ export const newArrivals = asyncHandler(
     const limitNum = parseInt(limit as string, 10) || 10;
 
     const products = await Product.find()
+      .populate('category_id')
       .sort({ createdAt: -1 })
       .limit(limitNum);
 
-    return successHandler(res, products);
+    const totalProducts = await Product.countDocuments();
+
+    return successHandler(res, products, 'Products fetched successfully', 200, {
+      totalItems: totalProducts,
+      limit: limitNum,
+      totalPages: Math.ceil(totalProducts / limitNum)
+    });
   }
 );
 
@@ -85,6 +93,12 @@ export const getTopSellingProducts = asyncHandler(
       .sort({ sales_count: -1 })
       .limit(limitNum);
 
-    return successHandler(res, products);
+    const totalProducts = await Product.countDocuments();
+
+    return successHandler(res, products, 'Products fetched successfully', 200, {
+      totalItems: totalProducts,
+      limit: limitNum,
+      totalPages: Math.ceil(totalProducts / limitNum)
+    });
   }
 );

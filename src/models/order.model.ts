@@ -10,10 +10,6 @@ const orderSchema = new Schema<IOrder>({
         type: Schema.Types.ObjectId,
         required: true
       },
-      model: {
-        type: String,
-        required: true
-      },
       quantity: {
         type: Number,
         required: true

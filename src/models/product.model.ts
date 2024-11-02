@@ -34,6 +34,19 @@ const productSchema = new Schema<IProduct>(
       ref: 'Category',
       required: true
     },
+    // rating: {
+    //   type: Number,
+    //   default: 0,
+    //   required: true
+    // },
+    // discountPrice: {
+    //   type: Number,
+    //   default: 0
+    // },
+    // discountPercent: {
+    //   type: Number,
+    //   default: 0
+    // },
     sales_count: {
       type: Number,
       default: 0
@@ -41,5 +54,12 @@ const productSchema = new Schema<IProduct>(
   },
   { timestamps: true }
 );
+
+productSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    delete ret.image.publicId;
+    return ret;
+  }
+});
 
 export default mongoose.model('Product', productSchema);

@@ -7,8 +7,17 @@ import { errorHandler } from '../utils/errorHandler.util';
 import { successHandler } from '../utils/successHadler.util';
 
 export const getCart = asyncHandler(async (req: Request, res: Response) => {
-  const cart = await req.user.populate('cart.items.productId');
-  return successHandler(res, cart, '', 200);
+  // const cart = await req.user.populate('cart.items.productId');
+
+  const userWithCart = await req.user.populate({
+    path: 'cart.items.productId',
+    populate: {
+      path: 'category_id',
+      select: 'name_en name_ka'
+    },
+    select: 'name price description image category_id'
+  });
+  return successHandler(res, userWithCart, '', 200);
 });
 
 export const postCart = asyncHandler(async (req: Request, res: Response) => {
