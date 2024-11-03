@@ -42,14 +42,17 @@ userSchema.set('toJSON', {
   }
 });
 
-userSchema.methods.addToCart = async function (productId: string) {
+userSchema.methods.addToCart = async function (
+  productId: string,
+  quantity?: number
+) {
   try {
     const cartProductIndex = this?.cart?.items?.findIndex(
       (cp: { productId: ObjectId }) => {
         return cp.productId.toString() === productId.toString();
       }
     );
-    let newQuantity = 1;
+    let newQuantity = quantity || 1;
     const updatedCartItems = [...this.cart.items];
     if (cartProductIndex >= 0) {
       newQuantity = this.cart.items[cartProductIndex].quantity + 1;
@@ -79,6 +82,31 @@ userSchema.methods.removeFromCart = async function (productId: string) {
     );
     this.cart.items = updatedCartItems;
     await this.save();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+userSchema.methods.reduceQuantityOfCart = async function (productId: string) {
+  try {
+    const cartItem = this.cart.items.find(
+      (item: { productId: ObjectId }) =>
+        item.productId.toString() === productId.toString()
+    );
+
+    if (cartItem) {
+      // Decrease the quantity
+      cartItem.quantity -= 1;
+
+      // If the quantity is less than or equal to zero, remove the item
+      if (cartItem.quantity <= 0) {
+        this.cart.items = this.cart.items.filter(
+          (item: { productId: ObjectId }) =>
+            item.productId.toString() !== productId.toString()
+        );
+      }
+      await this.save();
+    }
   } catch (error) {
     console.log(error);
   }

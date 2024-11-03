@@ -15,7 +15,7 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
       path: 'category_id',
       select: 'name_en name_ka'
     },
-    select: 'name price description image category_id'
+    select: 'name_ka name_en price description image category_id'
   });
   return successHandler(res, userWithCart, '', 200);
 });
@@ -41,13 +41,19 @@ export const postMultipleCart = asyncHandler(
 
     if (!products) return errorHandler(res, 'Products are required!', 400);
 
-    for (const product of products) {
-      console.log('product', product);
-      // const productFromDb = await Product.findById(product.id).select(
-      //   'name price description image category_id'
-      // );
+    for (const item of products) {
+      const { productId, quantity } = item;
+
+      const id = productId._id;
+
+      const productFromDb = await Product.findById(id);
+
+      if (!productFromDb) {
+        return errorHandler(res, `Product with ID ${id} not found!`, 404);
+      }
+      await req.user.addToCart(productId, quantity);
     }
-    return successHandler(res, {}, '', 200);
+    return successHandler(res, null, 'Items added to cart!', 200);
   }
 );
 
@@ -55,12 +61,25 @@ export const deleteCart = asyncHandler(async (req: Request, res: Response) => {
   const { productId } = req?.body;
 
   if (!productId) {
-    return;
+    return errorHandler(res, `Product with ID ${productId} not found!`, 404);
   }
 
   await req.user.removeFromCart(productId);
   return successHandler(res, null, 'product deleted from cart', 200);
 });
+
+export const reduceQuantityInCart = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { productId } = req?.body;
+
+    if (!productId) {
+      return errorHandler(res, `Product ID is required`, 400);
+    }
+
+    await req.user.reduceQuantityOfCart(productId);
+    return successHandler(res, null, 'product quantity reduced in cart', 200);
+  }
+);
 
 export const postOrder = asyncHandler(async (req: Request, res: Response) => {
   const cartProducts = await req.user.populate('cart.items.productId');
