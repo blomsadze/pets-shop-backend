@@ -102,3 +102,24 @@ export const getTopSellingProducts = asyncHandler(
     });
   }
 );
+
+export const getSimilarProducts = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const product = await Product.findById(id).populate('category_id');
+
+    const price = product?.price || 0;
+
+    const products = await Product.find({
+      price: { $gte: price - 50, $lte: price + 50 },
+      category_id: product?.category_id
+    })
+      .populate('category_id')
+      .limit(4);
+
+    if (!product)
+      return errorHandler(res, 'Product with given id not found', 404);
+
+    return successHandler(res, products, 'OK', 200);
+  }
+);

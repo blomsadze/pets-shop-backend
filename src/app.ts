@@ -11,10 +11,11 @@ import { authRoutes } from './routes/auth.route';
 import { adminRoutes } from './routes/admin.route';
 import { productRoutes } from './routes/product.route';
 import { cartRoutes } from './routes/cart.route';
-import { categoryRoutes } from './routes/categories.route';
+import { categoryRoutes } from './routes/category.route';
 
 import { globalErrorHandler } from './utils/errorHandler.util.js';
 import { get404 } from './controllers/error.controller';
+import { reviewRoutes } from './routes/review.route';
 
 dotenv.config();
 
@@ -61,6 +62,7 @@ app.use('/admin', adminRoutes);
 app.use(categoryRoutes);
 app.use(productRoutes);
 app.use(cartRoutes);
+app.use(reviewRoutes);
 
 app.use(helmet());
 app.use(compression());
