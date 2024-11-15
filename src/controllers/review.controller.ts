@@ -55,7 +55,10 @@ export const getTopRatedProducts = asyncHandler(
     const reviews = await Review.find()
       .sort({ rating: -1 })
       .limit(10)
-      .populate('userId', 'name');
+      .populate(
+        'userId',
+        'first_name_ka last_name_ka first_name_en last_name_en'
+      );
 
     return successHandler(res, reviews, 'ok');
   }

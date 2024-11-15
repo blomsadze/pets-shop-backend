@@ -4,7 +4,38 @@ import mongoose, { ObjectId } from 'mongoose';
 const { Schema } = mongoose;
 
 const userSchema = new Schema<IUser>({
-  name: {
+  first_name_ka: {
+    type: String,
+    required: true
+  },
+  first_name_en: {
+    type: String,
+    required: true
+  },
+  last_name_ka: {
+    type: String,
+    required: true
+  },
+  last_name_en: {
+    type: String,
+    required: true
+  },
+  gender: {
+    enum: ['male', 'female']
+  },
+  birthday_year: {
+    type: Number,
+    required: true
+  },
+  address_ka: {
+    type: String,
+    required: true
+  },
+  address_en: {
+    type: String,
+    required: true
+  },
+  phone: {
     type: String,
     required: true
   },

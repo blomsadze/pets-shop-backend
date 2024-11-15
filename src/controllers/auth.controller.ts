@@ -19,7 +19,19 @@ const accessTokenSecretKey = process.env.TOKEN_KEY as string;
 const refreshTokenSecretKey = `${process.env.TOKEN_KEY}/refresh-token`;
 
 export const signUp = asyncHandler(async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const {
+    first_name_ka,
+    first_name_en,
+    last_name_ka,
+    last_name_en,
+    gender,
+    birthday_year,
+    address_ka,
+    address_en,
+    phone,
+    email,
+    password
+  } = req.body;
 
   const { error } = signUpSchema.validate(req.body, { abortEarly: false });
 
@@ -33,7 +45,15 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
   const hashedPassword = await bcrypt.hash(password, 12);
 
   const newUser = new User({
-    name,
+    first_name_ka,
+    first_name_en,
+    last_name_ka,
+    last_name_en,
+    gender,
+    birthday_year,
+    address_ka,
+    address_en,
+    phone,
     email,
     password: hashedPassword,
     cart: { items: [] }
