@@ -30,7 +30,8 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
     address_en,
     phone,
     email,
-    password
+    password,
+    confirm_password
   } = req.body;
 
   const { error } = signUpSchema.validate(req.body, { abortEarly: false });
