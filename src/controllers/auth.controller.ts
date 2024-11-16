@@ -73,7 +73,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
   if (!user) return errorHandler(res, 'username or password is incorrect', 400);
 
-  const checkPassword = bcrypt.compare(password, user.password);
+  const checkPassword = await bcrypt.compare(password, user.password);
 
   if (!checkPassword) {
     return errorHandler(res, 'username or password is incorrect', 400);
