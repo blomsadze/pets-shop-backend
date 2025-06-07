@@ -16,7 +16,6 @@ import { categoryRoutes } from './routes/category.route';
 import { globalErrorHandler } from './utils/errorHandler.util.js';
 import { get404 } from './controllers/error.controller';
 import { reviewRoutes } from './routes/review.route';
-import Redis from 'ioredis';
 
 dotenv.config();
 
@@ -84,8 +83,3 @@ mongoose
   .catch((error) => {
     console.log(error);
   });
-
-// Connect to Redis
-const redis = new Redis(process.env.REDIS_URL as string);
-redis.on('connect', () => console.log('Redis Connected'));
-redis.on('error', (err) => console.log('Redis Error:', err));

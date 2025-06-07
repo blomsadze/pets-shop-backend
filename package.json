@@ -11,6 +11,7 @@
     "build": "tsc && npm i",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
+    "tsc": "tsc",
     "test": "mocha test/**"
   },
   "dependencies": {
@@ -21,11 +22,9 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "helmet": "^8.0.0",
-    "ioredis": "^5.6.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "multer": "^1.4.5-lts.1",
-    "redis": "^4.7.0"
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

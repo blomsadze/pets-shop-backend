@@ -11,7 +11,6 @@ import { successHandler } from '../utils/successHadler.util';
 import { errorHandler } from '../utils/errorHandler.util';
 import { productValidationSchema } from '../validations/product.validation';
 import { categoryValidationSchema } from '../validations/category.validation';
-import { invalidateCache } from '../middlewares/cache';
 
 export const addCategory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +25,6 @@ export const addCategory = asyncHandler(
     });
 
     await category.save();
-    await invalidateCache('categories');
 
     return successHandler(res, category, 'category added successfully', 201);
   }
@@ -50,8 +48,6 @@ export const editCategory = asyncHandler(
     category.name_en = name_en;
 
     await category.save();
-    await invalidateCache(`category:${id}`);
-    await invalidateCache('categories');
 
     return successHandler(res, category, 'Category updated successfully');
   }
@@ -70,8 +66,6 @@ export const deleteCategory = asyncHandler(
     if (!category)
       return errorHandler(res, 'Category with given id not found', 404);
 
-    await invalidateCache(`category:${id}`);
-    await invalidateCache('categories');
     return successHandler(res, null, 'Category deleted successfully');
   })
 );
@@ -119,7 +113,6 @@ export const addProduct = asyncHandler(
     });
 
     await product.save();
-    await invalidateCache('products');
 
     return successHandler(res, product, 'Product added successfully', 201);
   }
@@ -163,8 +156,6 @@ export const editProduct = asyncHandler(
     product.price = price;
 
     await product.save();
-    await invalidateCache(`product:${id}`);
-    await invalidateCache('products');
 
     return successHandler(res, product, 'Product updated successfully');
   }
@@ -186,9 +177,6 @@ export const deleteProduct = asyncHandler(
 
     if (!product)
       return errorHandler(res, 'Product with given id not found', 404);
-
-    await invalidateCache(`product:${id}`);
-    await invalidateCache('products');
 
     return successHandler(res, null, 'Product deleted successfully');
   })
