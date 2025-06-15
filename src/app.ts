@@ -16,6 +16,7 @@ import { categoryRoutes } from './routes/category.route';
 import { globalErrorHandler } from './utils/errorHandler.util.js';
 import { get404 } from './controllers/error.controller';
 import { reviewRoutes } from './routes/review.route';
+import { subCategoryRoutes } from './routes/subCategory.route';
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ app.use(categoryRoutes);
 app.use(productRoutes);
 app.use(cartRoutes);
 app.use(reviewRoutes);
+app.use(subCategoryRoutes);
 
 app.use(helmet());
 app.use(compression());

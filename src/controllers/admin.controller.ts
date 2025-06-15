@@ -11,7 +11,10 @@ import { asyncHandler } from '../utils/asyncHandler.util';
 import { successHandler } from '../utils/successHadler.util';
 import { errorHandler } from '../utils/errorHandler.util';
 import { productValidationSchema } from '../validations/product.validation';
-import { categoryValidationSchema } from '../validations/category.validation';
+import {
+  categoryValidationSchema,
+  subCategoryValidationSchema
+} from '../validations/category.validation';
 
 export const addCategory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -119,6 +122,65 @@ export const deleteCategory = asyncHandler(
       return errorHandler(res, 'Category with given id not found', 404);
 
     return successHandler(res, null, 'Category deleted successfully');
+  })
+);
+
+export const addSubCategory = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { name_ka, name_en, categoryId } = req.body;
+
+    const { error } = subCategoryValidationSchema.validate(req.body);
+    if (error) return validationHandler(res, error);
+
+    const subcategory = new SubCategory({
+      name_ka,
+      name_en,
+      categoryId
+    });
+
+    await subcategory.save();
+
+    return successHandler(
+      res,
+      subcategory,
+      'Subcategory added successfully',
+      201
+    );
+  }
+);
+
+export const editSubCategory = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    const { name_ka, name_en, categoryId } = req.body;
+
+    const subcategory = await SubCategory.findById(id);
+
+    if (!subcategory)
+      return errorHandler(res, 'Subcategory with given id not found', 404);
+
+    const { error } = subCategoryValidationSchema.validate(req.body);
+    if (error) return validationHandler(res, error);
+
+    subcategory.name_ka = name_ka;
+    subcategory.name_en = name_en;
+    subcategory.categoryId = categoryId;
+
+    await subcategory.save();
+
+    return successHandler(res, subcategory, 'Subcategory updated successfully');
+  }
+);
+
+export const deleteSubCategory = asyncHandler(
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    const subcategory = await SubCategory.findById(id);
+    if (!subcategory)
+      return errorHandler(res, 'Subcategory with given id not found', 404);
+    await SubCategory.findByIdAndDelete(id);
+    return successHandler(res, null, 'Subcategory deleted successfully');
   })
 );
 
