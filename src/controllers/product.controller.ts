@@ -43,6 +43,35 @@ export const getProducts = asyncHandler(
   }
 );
 
+export const getProductsBySubCategory = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { subcategoryId, page = '1', limit = '10' } = req.params;
+
+    const pageNum = parseInt(page as string, 10) || 1;
+    const limitNum = parseInt(limit as string, 10) || 10;
+
+    const filter: { subcategoryId?: string } = {};
+
+    if (subcategoryId) {
+      filter.subcategoryId = subcategoryId as string;
+    }
+
+    const products = await Product.find(filter)
+      .populate('subcategoryId')
+      .skip((pageNum - 1) * limitNum)
+      .limit(limitNum);
+
+    const totalProducts = await Product.countDocuments(filter);
+
+    return successHandler(res, products, 'Products fetched successfully', 200, {
+      totalItems: totalProducts,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(totalProducts / limitNum)
+    });
+  }
+);
+
 export const getProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
