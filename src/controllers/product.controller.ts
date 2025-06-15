@@ -17,18 +17,18 @@ export const getProducts = asyncHandler(
     const pageNum = parseInt(page as string, 10) || 1;
     const limitNum = parseInt(limit as string, 10) || 10;
 
-    const filter: { category_id?: string } = {};
+    const filter: { categoryId?: string } = {};
 
     if (category) {
       const foundCategory = await Category.findOne({ name_en: category });
       if (!foundCategory) {
         return errorHandler(res, 'Incorrect category', 404);
       }
-      filter.category_id = foundCategory._id.toString();
+      filter.categoryId = foundCategory._id.toString();
     }
 
     const products = await Product.find(filter)
-      .populate('category_id')
+      .populate('categoryId')
       .skip((pageNum - 1) * limitNum)
       .limit(limitNum);
 
@@ -46,7 +46,7 @@ export const getProducts = asyncHandler(
 export const getProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const product = await Product.findById(id).populate('category_id');
+    const product = await Product.findById(id).populate('categoryId');
 
     if (!product)
       return errorHandler(res, 'Product with given id not found', 404);
@@ -61,7 +61,7 @@ export const newArrivals = asyncHandler(
     const limitNum = parseInt(limit as string, 10) || 10;
 
     const products = await Product.find()
-      .populate('category_id')
+      .populate('categoryId')
       .sort({ createdAt: -1 })
       .limit(limitNum);
 
@@ -106,15 +106,15 @@ export const getTopSellingProducts = asyncHandler(
 export const getSimilarProducts = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const product = await Product.findById(id).populate('category_id');
+    const product = await Product.findById(id).populate('categoryId');
 
     const price = product?.price || 0;
 
     const products = await Product.find({
       price: { $gte: price - 50, $lte: price + 50 },
-      category_id: product?.category_id
+      categoryId: product?.categoryId
     })
-      .populate('category_id')
+      .populate('categoryId')
       .limit(4);
 
     if (!product)

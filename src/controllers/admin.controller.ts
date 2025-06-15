@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import Product from '../models/product.model';
 import Category from '../models/category.model';
+import SubCategory from '../models/subCategory.model';
 
 // utils
 import { validationHandler } from '../utils/validationHandler.util';
@@ -15,13 +16,38 @@ import { categoryValidationSchema } from '../validations/category.validation';
 export const addCategory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { name_ka, name_en } = req.body;
+    const image = req.file;
 
     const { error } = categoryValidationSchema.validate(req.body);
     if (error) return validationHandler(res, error);
 
+    let imageDetails = null;
+
+    if (image) {
+      try {
+        const result = await uploadImage(req);
+        if (result && result.url && result.publicId) {
+          imageDetails = result;
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        return res.status(500).json({ error: 'Failed to upload image.' });
+      }
+    } else {
+      return validationHandler(res, {
+        details: [
+          {
+            message: 'image is required',
+            path: [Array]
+          }
+        ]
+      });
+    }
+
     const category = new Category({
       name_ka,
-      name_en
+      name_en,
+      image: imageDetails
     });
 
     await category.save();
@@ -29,12 +55,16 @@ export const addCategory = asyncHandler(
     return successHandler(res, category, 'category added successfully', 201);
   }
 );
+
 export const editCategory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { name_ka, name_en } = req.body;
 
+    const image = req.file;
+
     const category = await Category.findById(id);
+
     if (!category)
       return errorHandler(res, 'Category with given id not found', 404);
 
@@ -44,6 +74,22 @@ export const editCategory = asyncHandler(
 
     if (error) return validationHandler(res, error);
 
+    if (image) {
+      try {
+        const result = await uploadImage(req);
+        if (result && result.url && result.publicId) {
+          await deleteImage(category.image.publicId);
+          category.image = {
+            url: result.url,
+            publicId: result.publicId
+          };
+        }
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        return res.status(500).json({ error: 'Failed to upload image.' });
+      }
+    }
+
     category.name_ka = name_ka;
     category.name_en = name_en;
 
@@ -52,16 +98,22 @@ export const editCategory = asyncHandler(
     return successHandler(res, category, 'Category updated successfully');
   }
 );
+
 export const deleteCategory = asyncHandler(
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+
+    let imagePublicId = null;
 
     const category = await Category.findById(id);
 
     if (!category)
       return errorHandler(res, 'Category with given id not found', 404);
 
+    imagePublicId = category?.image?.publicId;
+
     await Category.findByIdAndDelete(id);
+    await deleteImage(imagePublicId);
 
     if (!category)
       return errorHandler(res, 'Category with given id not found', 404);
@@ -70,14 +122,24 @@ export const deleteCategory = asyncHandler(
   })
 );
 
-// toys
 export const addProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name_ka, name_en, description, category_id, price } = req.body;
+    const { name_ka, name_en, description, categoryId, subcategoryId, price } =
+      req.body;
+
     const image = req.file;
 
     const { error } = productValidationSchema.validate(req.body);
     if (error) return validationHandler(res, error);
+
+    const subcategory = await SubCategory.findById(subcategoryId);
+    if (!subcategory || subcategory.categoryId.toString() !== categoryId) {
+      return errorHandler(
+        res,
+        'Subcategory does not belong to the given category',
+        400
+      );
+    }
 
     let imageDetails = null;
 
@@ -108,7 +170,8 @@ export const addProduct = asyncHandler(
       description,
       price,
       image: imageDetails,
-      category_id,
+      categoryId,
+      subcategoryId,
       userId: req.user._id
     });
 
@@ -117,10 +180,13 @@ export const addProduct = asyncHandler(
     return successHandler(res, product, 'Product added successfully', 201);
   }
 );
+
 export const editProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const { name_ka, name_en, description, category_id, price } = req.body;
+
+    const { name_ka, name_en, description, categoryId, subcategoryId, price } =
+      req.body;
     const image = req.file;
 
     const product = await Product.findById(id);
@@ -132,6 +198,15 @@ export const editProduct = asyncHandler(
     });
 
     if (error) return validationHandler(res, error);
+
+    const subcategory = await SubCategory.findById(subcategoryId);
+    if (!subcategory || subcategory.categoryId.toString() !== categoryId) {
+      return errorHandler(
+        res,
+        'Subcategory does not belong to the given category',
+        400
+      );
+    }
 
     if (image) {
       try {
@@ -151,7 +226,8 @@ export const editProduct = asyncHandler(
 
     product.name_ka = name_ka;
     product.name_en = name_en;
-    product.category_id = category_id;
+    product.categoryId = categoryId;
+    product.subcategoryId = subcategoryId;
     product.description = description;
     product.price = price;
 

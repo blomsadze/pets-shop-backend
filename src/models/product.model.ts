@@ -29,9 +29,14 @@ const productSchema = new Schema<IProduct>(
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
-    category_id: {
+    categoryId: {
       type: Schema.Types.ObjectId,
       ref: 'Category',
+      required: true
+    },
+    subcategoryId: {
+      type: Schema.Types.ObjectId,
+      ref: 'SubCategory',
       required: true
     },
     // rating: {

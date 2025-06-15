@@ -12,7 +12,8 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "tsc": "tsc",
-    "test": "mocha test/**"
+    "test": "mocha test/**",
+    "seed": "ts-node src/scripts/categories.seeder.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -44,6 +45,7 @@
     "globals": "^15.11.0",
     "mocha": "^11.0.1",
     "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
     "tsc-watch": "^6.2.0",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",

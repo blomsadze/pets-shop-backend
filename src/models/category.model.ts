@@ -11,6 +11,10 @@ const categorySchema = new Schema<ICategory>({
   name_en: {
     type: String,
     required: true
+  },
+  image: {
+    type: String,
+    required: false
   }
 });
 

@@ -11,6 +11,7 @@ export interface IProduct {
     publicId: string;
   };
   user_id: ObjectId;
-  category_id: ObjectId;
+  categoryId: ObjectId;
+  subcategoryId: ObjectId;
   sales_count: number;
 }
