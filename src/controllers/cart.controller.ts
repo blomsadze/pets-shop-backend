@@ -12,10 +12,10 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
   const userWithCart = await req.user.populate({
     path: 'cart.items.productId',
     populate: {
-      path: 'categoryId',
+      path: 'category_id',
       select: 'name_en name_ka'
     },
-    select: 'name_ka name_en price description image categoryId'
+    select: 'name_ka name_en price description image category_id'
   });
   return successHandler(res, userWithCart, '', 200);
 });

@@ -127,7 +127,7 @@ export const deleteCategory = asyncHandler(
 
 export const addSubCategory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name_ka, name_en, categoryId } = req.body;
+    const { name_ka, name_en, category_id } = req.body;
 
     const { error } = subCategoryValidationSchema.validate(req.body);
     if (error) return validationHandler(res, error);
@@ -135,7 +135,7 @@ export const addSubCategory = asyncHandler(
     const subcategory = new SubCategory({
       name_ka,
       name_en,
-      categoryId
+      category_id
     });
 
     await subcategory.save();
@@ -153,7 +153,7 @@ export const editSubCategory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-    const { name_ka, name_en, categoryId } = req.body;
+    const { name_ka, name_en, category_id } = req.body;
 
     const subcategory = await SubCategory.findById(id);
 
@@ -165,7 +165,7 @@ export const editSubCategory = asyncHandler(
 
     subcategory.name_ka = name_ka;
     subcategory.name_en = name_en;
-    subcategory.categoryId = categoryId;
+    subcategory.category_id = category_id;
 
     await subcategory.save();
 
@@ -186,16 +186,23 @@ export const deleteSubCategory = asyncHandler(
 
 export const addProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name_ka, name_en, description, categoryId, subcategoryId, price } =
-      req.body;
+    const {
+      name_ka,
+      name_en,
+      description_ka,
+      description_en,
+      category_id,
+      subcategory_id,
+      price
+    } = req.body;
 
     const image = req.file;
 
     const { error } = productValidationSchema.validate(req.body);
     if (error) return validationHandler(res, error);
 
-    const subcategory = await SubCategory.findById(subcategoryId);
-    if (!subcategory || subcategory.categoryId.toString() !== categoryId) {
+    const subcategory = await SubCategory.findById(subcategory_id);
+    if (!subcategory || subcategory.category_id.toString() !== category_id) {
       return errorHandler(
         res,
         'Subcategory does not belong to the given category',
@@ -229,11 +236,12 @@ export const addProduct = asyncHandler(
     const product = new Product({
       name_ka,
       name_en,
-      description,
+      description_ka,
+      description_en,
       price,
       image: imageDetails,
-      categoryId,
-      subcategoryId,
+      category_id,
+      subcategory_id,
       userId: req.user._id
     });
 
@@ -247,8 +255,15 @@ export const editProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-    const { name_ka, name_en, description, categoryId, subcategoryId, price } =
-      req.body;
+    const {
+      name_ka,
+      name_en,
+      description_ka,
+      description_en,
+      category_id,
+      subcategory_id,
+      price
+    } = req.body;
     const image = req.file;
 
     const product = await Product.findById(id);
@@ -261,8 +276,8 @@ export const editProduct = asyncHandler(
 
     if (error) return validationHandler(res, error);
 
-    const subcategory = await SubCategory.findById(subcategoryId);
-    if (!subcategory || subcategory.categoryId.toString() !== categoryId) {
+    const subcategory = await SubCategory.findById(subcategory_id);
+    if (!subcategory || subcategory.category_id.toString() !== category_id) {
       return errorHandler(
         res,
         'Subcategory does not belong to the given category',
@@ -288,9 +303,10 @@ export const editProduct = asyncHandler(
 
     product.name_ka = name_ka;
     product.name_en = name_en;
-    product.categoryId = categoryId;
-    product.subcategoryId = subcategoryId;
-    product.description = description;
+    product.category_id = category_id;
+    product.subcategory_id = subcategory_id;
+    product.description_ka = description_ka;
+    product.description_en = description_en;
     product.price = price;
 
     await product.save();

@@ -16,6 +16,6 @@ productRoutes.get('/products/top-selling', getTopSellingProducts);
 productRoutes.get('/products/:id', getProduct);
 productRoutes.get('/products/similar-products/:id', getSimilarProducts);
 productRoutes.get(
-  '/products/by-subcategory/:subcategoryId',
+  '/products/by-subcategory/:subcategory_id',
   getProductsBySubCategory
 );

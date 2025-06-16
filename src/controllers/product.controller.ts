@@ -17,18 +17,18 @@ export const getProducts = asyncHandler(
     const pageNum = parseInt(page as string, 10) || 1;
     const limitNum = parseInt(limit as string, 10) || 10;
 
-    const filter: { categoryId?: string } = {};
+    const filter: { category_id?: string } = {};
 
     if (category) {
       const foundCategory = await Category.findOne({ name_en: category });
       if (!foundCategory) {
         return errorHandler(res, 'Incorrect category', 404);
       }
-      filter.categoryId = foundCategory._id.toString();
+      filter.category_id = foundCategory._id.toString();
     }
 
     const products = await Product.find(filter)
-      .populate('categoryId')
+      .populate('category_id')
       .skip((pageNum - 1) * limitNum)
       .limit(limitNum);
 
@@ -45,19 +45,19 @@ export const getProducts = asyncHandler(
 
 export const getProductsBySubCategory = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { subcategoryId, page = '1', limit = '10' } = req.params;
+    const { subcategory_id, page = '1', limit = '10' } = req.params;
 
     const pageNum = parseInt(page as string, 10) || 1;
     const limitNum = parseInt(limit as string, 10) || 10;
 
-    const filter: { subcategoryId?: string } = {};
+    const filter: { subcategory_id?: string } = {};
 
-    if (subcategoryId) {
-      filter.subcategoryId = subcategoryId as string;
+    if (subcategory_id) {
+      filter.subcategory_id = subcategory_id as string;
     }
 
     const products = await Product.find(filter)
-      .populate('subcategoryId')
+      .populate('subcategory_id')
       .skip((pageNum - 1) * limitNum)
       .limit(limitNum);
 
@@ -75,7 +75,7 @@ export const getProductsBySubCategory = asyncHandler(
 export const getProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const product = await Product.findById(id).populate('categoryId');
+    const product = await Product.findById(id).populate('category_id');
 
     if (!product)
       return errorHandler(res, 'Product with given id not found', 404);
@@ -90,7 +90,7 @@ export const newArrivals = asyncHandler(
     const limitNum = parseInt(limit as string, 10) || 10;
 
     const products = await Product.find()
-      .populate('categoryId')
+      .populate('category_id')
       .sort({ createdAt: -1 })
       .limit(limitNum);
 
@@ -135,15 +135,15 @@ export const getTopSellingProducts = asyncHandler(
 export const getSimilarProducts = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
-    const product = await Product.findById(id).populate('categoryId');
+    const product = await Product.findById(id).populate('category_id');
 
     const price = product?.price || 0;
 
     const products = await Product.find({
       price: { $gte: price - 50, $lte: price + 50 },
-      categoryId: product?.categoryId
+      category_id: product?.category_id
     })
-      .populate('categoryId')
+      .populate('category_id')
       .limit(4);
 
     if (!product)

@@ -13,7 +13,11 @@ const productSchema = new Schema<IProduct>(
       type: String,
       required: true
     },
-    description: {
+    description_ka: {
+      type: String,
+      required: true
+    },
+    description_en: {
       type: String,
       required: true
     },
@@ -29,12 +33,12 @@ const productSchema = new Schema<IProduct>(
       type: Schema.Types.ObjectId,
       ref: 'User'
     },
-    categoryId: {
+    category_id: {
       type: Schema.Types.ObjectId,
       ref: 'Category',
       required: true
     },
-    subcategoryId: {
+    subcategory_id: {
       type: Schema.Types.ObjectId,
       ref: 'SubCategory',
       required: true

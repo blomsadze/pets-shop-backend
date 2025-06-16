@@ -8,5 +8,5 @@ export const categoryValidationSchema = Joi.object({
 export const subCategoryValidationSchema = Joi.object({
   name_ka: Joi.string().required(),
   name_en: Joi.string().required(),
-  categoryId: Joi.string().required()
+  category_id: Joi.string().required()
 });

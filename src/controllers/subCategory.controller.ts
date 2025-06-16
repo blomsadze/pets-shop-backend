@@ -17,7 +17,7 @@ export const getSubCategoryByCategoryId = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-    const subcategories = await SubCategory.find({ categoryId: id });
+    const subcategories = await SubCategory.find({ category_id: id });
 
     if (!subcategories || subcategories.length === 0) {
       return res.status(404).json({

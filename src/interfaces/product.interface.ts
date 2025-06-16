@@ -4,14 +4,15 @@ export interface IProduct {
   _id: string;
   name_ka: string;
   name_en: string;
-  description: string;
+  description_ka: string;
+  description_en: string;
   price: number;
   image: {
     url: string;
     publicId: string;
   };
   user_id: ObjectId;
-  categoryId: ObjectId;
-  subcategoryId: ObjectId;
+  category_id: ObjectId;
+  subcategory_id: ObjectId;
   sales_count: number;
 }

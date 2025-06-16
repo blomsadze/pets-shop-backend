@@ -61,122 +61,122 @@ const seedData = async () => {
       {
         name_ka: 'კატის მშრალი საკვები',
         name_en: 'Dry Cat Food',
-        categoryId: categories[0]._id
+        category_id: categories[0]._id
       },
       {
         name_ka: 'კატის სველი საკვები',
         name_en: 'Wet Cat Food',
-        categoryId: categories[0]._id
+        category_id: categories[0]._id
       },
       {
         name_ka: 'კატის სათამაშოები',
         name_en: 'Cat Toys',
-        categoryId: categories[0]._id
+        category_id: categories[0]._id
       },
       {
         name_ka: 'კატის მოვლის საშუალებები',
         name_en: 'Cat Care & Grooming',
-        categoryId: categories[0]._id
+        category_id: categories[0]._id
       },
       {
         name_ka: 'კატის ხეები',
         name_en: 'Cat Trees',
-        categoryId: categories[0]._id
+        category_id: categories[0]._id
       },
 
       // dogs
       {
         name_ka: 'ძაღლის მშრალი საკვები',
         name_en: 'Dry Dog Food',
-        categoryId: categories[1]._id
+        category_id: categories[1]._id
       },
       {
         name_ka: 'ძაღლის სველი საკვები',
         name_en: 'Wet Dog Food',
-        categoryId: categories[1]._id
+        category_id: categories[1]._id
       },
       {
         name_ka: 'ძაღლის სათამაშოები',
         name_en: 'Dog Toys',
-        categoryId: categories[1]._id
+        category_id: categories[1]._id
       },
       {
         name_ka: 'ძაღლის მოვლის საშუალებები',
         name_en: 'Dog Care & Grooming',
-        categoryId: categories[1]._id
+        category_id: categories[1]._id
       },
       {
         name_ka: 'ძაღლის ტანსაცმელი',
         name_en: 'Dog Clothing',
-        categoryId: categories[1]._id
+        category_id: categories[1]._id
       },
       {
         name_ka: 'ძაღლის სასუსნავები და ძვლები',
         name_en: 'Dog Treats & Bones',
-        categoryId: categories[1]._id
+        category_id: categories[1]._id
       },
 
       // small pets
       {
         name_ka: 'პატარა შინაური ცხოველების გალიები',
         name_en: 'Small Pet Cages',
-        categoryId: categories[2]._id
+        category_id: categories[2]._id
       },
       {
         name_ka: 'პატარა შინაური ცხოველების საკვები',
         name_en: 'Small Pet Food',
-        categoryId: categories[2]._id
+        category_id: categories[2]._id
       },
       {
         name_ka: 'პატარა შინაური ცხოველების სათამაშოები',
         name_en: 'Small Pet Toys',
-        categoryId: categories[2]._id
+        category_id: categories[2]._id
       },
       {
         name_ka: 'პატარა შინაური ცხოველების მოვლის საშუალებები',
         name_en: 'Small Pet Care & Grooming',
-        categoryId: categories[2]._id
+        category_id: categories[2]._id
       },
 
       // fish
       {
         name_ka: 'თევზის აკვარიუმები',
         name_en: 'Fish Aquariums',
-        categoryId: categories[3]._id
+        category_id: categories[3]._id
       },
       {
         name_ka: 'თევზის საკვები',
         name_en: 'Fish Food',
-        categoryId: categories[3]._id
+        category_id: categories[3]._id
       },
 
       // birds
       {
         name_ka: 'ფრინველების გალიები',
         name_en: 'Bird Cages',
-        categoryId: categories[4]._id
+        category_id: categories[4]._id
       },
       {
         name_ka: 'ფრინველების საკვები',
         name_en: 'Bird Food',
-        categoryId: categories[4]._id
+        category_id: categories[4]._id
       },
       {
         name_ka: 'ფრინველების სათამაშოები',
         name_en: 'Bird Toys',
-        categoryId: categories[4]._id
+        category_id: categories[4]._id
       },
 
       // reptiles
       {
         name_ka: 'რეპტილიების გალიები',
         name_en: 'Reptile Cages',
-        categoryId: categories[5]._id
+        category_id: categories[5]._id
       },
       {
         name_ka: 'რეპტილიების საკვები',
         name_en: 'Reptile Food',
-        categoryId: categories[5]._id
+        category_id: categories[5]._id
       }
     ]);
 

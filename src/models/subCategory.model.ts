@@ -12,7 +12,7 @@ const subCategorySchema = new Schema<ISubCategory>({
     type: String,
     required: true
   },
-  categoryId: {
+  category_id: {
     type: Schema.Types.ObjectId,
     ref: 'Category',
     required: true
